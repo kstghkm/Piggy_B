@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Piggy-B</string>
+    <string name="emptyString" />
 </resources>
