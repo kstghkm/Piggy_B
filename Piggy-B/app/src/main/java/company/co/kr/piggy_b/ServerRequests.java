@@ -23,6 +23,8 @@ import java.util.ArrayList;
 /**
  * Created by user on 2016-06-01.
  */
+
+
 public class ServerRequests {
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 15000;     //15초
@@ -122,22 +124,22 @@ public class ServerRequests {
                 HttpEntity entity = httpResponse.getEntity();
                 String result = EntityUtils.toString(entity);
                 JSONObject jsonObject = new JSONObject(result);
-/*
-               JSONArray jsonObject= new JSONArray(result);
+//
+//               JSONArray jsonObject= new JSONArray(result);
+//
+//                for(int i=0;i<jsonObject.length();i++){
+//                    JSONObject object = jsonObject.getJSONObject(i);
+            //        String name, phone;
+              //      name = null;
+                //    phone = null;
 
-                for(int i=0;i<jsonObject.length();i++){
-                    JSONObject object = jsonObject.getJSONObject(i);
-                    String name, phone;
-                    name = null;
-                    phone = null;
+        //            if(object.has("name"))
+          //              name = object.getString("name");
+                  //  if(object.has("phone"))
+                    //    phone = object.getString("phone");
 
-                    if(object.has("name"))
-                        name = object.getString("name");
-                    if(object.has("phone"))
-                        phone = object.getString("phone");
-
-                    retunedContact = new Contact(name, phone, contact.username, contact.password);
-                }*/
+//                    retunedContact = new Contact(name, phone, contact.username, contact.password);
+//                }
 
                 if(jsonObject.length() == 0){
                     retunedContact = null;
@@ -166,7 +168,7 @@ public class ServerRequests {
         protected void onPostExecute(Contact returnedContact) {
 
             progressDialog.dismiss();
-            callback.done(null);
+            callback.done(returnedContact);
             super.onPostExecute(returnedContact);
         }
     }
