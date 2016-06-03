@@ -14,14 +14,14 @@
         android:layout_height="wrap_content"
         android:text="로그인"
         android:id="@+id/Blogin"
-        android:onClick="onButtonClick"
+        android:onClick="onLoginClick"
         android:layout_below="@+id/TFpass"
         android:layout_toStartOf="@+id/Bsignup1" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/TFid"
+        android:id="@+id/TFusername"
         android:layout_below="@+id/textView2"
         android:layout_alignParentStart="true"
         android:hint="아이디를 입력하세요" />
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="ID"
+        android:text="Username"
         android:id="@+id/textView2"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
@@ -41,7 +41,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Password"
         android:id="@+id/textView3"
-        android:layout_below="@+id/TFid"
+        android:layout_below="@+id/TFusername"
         android:layout_alignParentStart="true" />
 
     <EditText
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="회원가입"
         android:id="@+id/Bsignup1"
-        android:onClick="onButtonClick"
+        android:onClick="onRegisterClick"
         android:layout_below="@+id/TFpass"
         android:layout_alignEnd="@+id/TFpass" />
 
