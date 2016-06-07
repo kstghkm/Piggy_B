@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Information"
+        android:text="내정보"
         android:id="@+id/textView9"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Name :"
+        android:text="이름  : "
         android:id="@+id/textView10"
         android:layout_below="@+id/textView9"
         android:layout_alignParentStart="true"
@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Phone :"
+        android:text="연락처 : "
         android:id="@+id/textView12"
         android:layout_below="@+id/textView10"
         android:layout_alignParentStart="true" />
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Username :"
+        android:text="ID : "
         android:id="@+id/textView13"
         android:layout_below="@+id/textView12"
         android:layout_alignParentStart="true" />
@@ -72,7 +72,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Password :"
+        android:text="등록한 계좌 :"
         android:id="@+id/textView16"
         android:layout_below="@+id/textView13"
         android:layout_alignParentStart="true" />
@@ -81,17 +81,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:id="@+id/show_pass"
-        android:layout_alignStart="@+id/show_uname"
+        android:id="@+id/show_account"
         android:layout_alignTop="@+id/textView16"
-        android:layout_alignEnd="@+id/show_uname" />
+        android:layout_alignEnd="@+id/show_uname"
+        android:layout_alignStart="@+id/show_uname" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="로그아웃"
         android:id="@+id/bLogout"
+        android:onClick="onLogoutClick"
+        android:layout_below="@+id/bReturn"
+        android:layout_alignStart="@+id/bReturn"
+        android:layout_alignEnd="@+id/bReturn" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/show_coin"
+        android:text = "0"
+        android:layout_alignBottom="@+id/textView14"
+        android:layout_alignEnd="@+id/textView11" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="적립금"
+        android:id="@+id/textView11"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onLogoutClick" />
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=" 원"
+        android:id="@+id/textView14"
+        android:layout_below="@+id/textView11"
+        android:layout_toEndOf="@+id/show_coin" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내 동전 돌려받기"
+        android:id="@+id/bReturn"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView14"
+        android:layout_alignEnd="@+id/textView14"
+        android:layout_toEndOf="@+id/textView16"
+        android:onClick="onRefundClick" />
 </RelativeLayout>

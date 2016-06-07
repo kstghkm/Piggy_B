@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Piggy-B</string>
     <string name="emptyString" />
+
+    <string-array name="bank_list">
+        <item>우리은행</item>
+        <item>국민은행</item>
+        <item>신한은행</item>
+        <item>외환은행</item>
+        <item>IBK기업은행</item>
+        <item>농협</item>
+        <item>우체국</item>
+    </string-array>
 </resources>
