@@ -27,20 +27,20 @@ public class DisplayInfo extends Activity {
     private IntentFilter[] intentFilters;
     private String [][] NFCTechLists;
     int receivedCoin;
-    private int savedCoin;
+    int savedCoin;
+
+    BackPressCloseHandler backPressCloseHandler;
 
     TextView tvname, tvphone, tvusername, tvaccount;
     TextView tvsavedCoin;
     LocalDB localDB;
-
-    public DisplayInfo() {
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_info);
 
+        backPressCloseHandler = new BackPressCloseHandler(this);
         tvname = (TextView) findViewById(R.id.show_name);
         tvphone = (TextView)findViewById(R.id.show_phone);
         tvusername = (TextView)findViewById(R.id.show_uname);
@@ -70,6 +70,12 @@ public class DisplayInfo extends Activity {
         NFCTechLists = new String[][] {new String[]{NfcF.class.getName()}};
     }
 
+    @Override//뒤로가기 눌렀을 때
+    public void onBackPressed() {
+        backPressCloseHandler.onBackPressed();
+    }
+
+
 //    액티비티가 실행될 때 NFC어댑터 활성화
     public void onResume() {
         super.onResume();
@@ -77,28 +83,35 @@ public class DisplayInfo extends Activity {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, NFCTechLists);
     }
 
-//    액티비티가 종료될 때 NFC 어댑터 비활성화
+//    다른 액티비티로 넘어갈 때 NFC 어댑터 비활성화
     public void onPause() {
         super.onPause();
         if(nfcAdapter != null)
             nfcAdapter.disableForegroundDispatch(this);
+
     }
 
 //    NFC 정보 수신 함수 - 인텐트에 포함된 정보를 분석 후 동전 정보 저장
     public void onNewIntent(Intent intent) {
-//        String action = intent.getAction();
-//        String tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG).toString();
-//        String strMsg = action + "\n\n" + tag;
-//        tvsavedCoin.setText(strMsg);
 
+        UserInfo userInfo = localDB.getLoggedInUser();
         Parcelable[] messages = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        if(messages == null) return;
+        if(messages == null) {
+            return;
+        }
         // 동전 정보 저장
-        for(int i = 0; i < messages.length; i++)
-            receivedCoin = readCoin((NdefMessage)messages[i]);
-        updateCoin(receivedCoin);
-        displayContactDetails();
+        receivedCoin = readCoin((NdefMessage)messages[0]);
+        updateCoin_localDB(userInfo, receivedCoin);
+        // 동전 정보 갱신
+        ServerRequests serverRequests = new ServerRequests(this);
+        serverRequests.updateCoinInBackground(userInfo, new GetUserCallback() {
+            @Override
+            public void done(UserInfo returnedUserInfo) {
+                displayContactDetails();
+            }
+        });
     }
+
 //      NFC 메세지로부터 동전 정보 읽기
     public int readCoin(NdefMessage ndefMessage){
         String strRec = "";
@@ -109,12 +122,12 @@ public class DisplayInfo extends Activity {
             byte[] payload = record.getPayload();
             if(Arrays.equals(record.getType(),NdefRecord.RTD_TEXT)){
                 strRec = byteDecoding(payload);
-                strRec = "" + strRec;
             }
         }
-        //tvsavedCoin.setText(strRec);
         return Integer.valueOf(strRec);
     }
+
+
     // encoding된 메세지 decoding
     public String byteDecoding(byte[] buf){
         String strText="";
@@ -150,14 +163,23 @@ public class DisplayInfo extends Activity {
 
     //
     private void displayContactDetails(){
-        String temp = "";
         UserInfo userInfo = localDB.getLoggedInUser();
-        temp = userInfo.bank + "은행  " + userInfo.account;
+        String temp = "";
+        switch (userInfo.bank){
+            case "WooriB": temp = "우리은행";break;
+            case "KB": temp = "국민은행";break;
+            case "ShinhanB": temp = "신한은행";break;
+            case "KEB": temp = "외환은행";break;
+            case "IBK": temp = "기업은행";break;
+            case "NH": temp = "농협";break;
+            case "Post": temp = "우체국";break;
+            default : break;
+        }
         tvname.setText(userInfo.name);
         tvphone.setText(userInfo.phone);
         tvusername.setText(userInfo.username);
-        tvaccount.setText(temp);
-//        tvsavedCoin.setText(userInfo.coin);
+        tvaccount.setText(temp + "\n" + userInfo.account);
+        tvsavedCoin.setText(String.valueOf(userInfo.getCoin()));
     }
     public void onLogoutClick(View view){
         localDB.clearData();
@@ -168,8 +190,11 @@ public class DisplayInfo extends Activity {
 
     }
 
-    private void updateCoin(int coin){
-        savedCoin += coin;
+    private void updateCoin_localDB(UserInfo userInfo, int coin){
+        userInfo.update_User_coin(coin);
+        localDB.setCoin(userInfo.getCoin());
     }
+
+
 }
 

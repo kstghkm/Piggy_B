@@ -6,7 +6,7 @@ package company.co.kr.piggy_b;
 public class UserInfo {
 
     String name, phone, username, password, bank, account;
-    int coin;
+    private int coin;
 
     public UserInfo(String name, String phone, String username, String password, String bank, String account, int coin){
         this.name = name;
@@ -21,5 +21,14 @@ public class UserInfo {
     public UserInfo(String username, String password){
         this.username = username;
         this.password = password;
+    }
+
+    public void update_User_coin(int coin){
+        this.coin = this.coin + coin;
+    }
+
+    public int getCoin(){
+        int coin = this.coin;
+        return coin;
     }
 }

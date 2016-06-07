@@ -23,13 +23,22 @@ public class LocalDB {
         spEditor.putString("phone", userInfo.phone);
         spEditor.putString("username", userInfo.username);
         spEditor.putString("password", userInfo.password);
+        spEditor.putString("bank", userInfo.bank);
         spEditor.putString("account", userInfo.account);
-        spEditor.putInt("coin",userInfo.coin);
+        spEditor.putInt("coin",userInfo.getCoin());
         spEditor.commit();
     }
+
+    // 동전 정보 관리
     public int getCoin(){
         return localDB.getInt("coin",0);
     }
+    public void setCoin(int coin){
+        SharedPreferences.Editor spEditor = localDB.edit();
+        spEditor.putInt("coin",coin);
+        spEditor.commit();
+    }
+
     // 로컬 DB에서 로그인한 유저의 정보를 가져온다.
     public UserInfo getLoggedInUser(){
         String name = localDB.getString("name", "");

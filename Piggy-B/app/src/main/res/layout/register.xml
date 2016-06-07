@@ -82,34 +82,39 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ETpass2"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/bank"
-        android:id="@+id/textView17" />
+        android:text="은 행 명"
+        android:id="@+id/textView17"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ETpass2"
+        android:layout_toStartOf="@+id/spinner"/>
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView17"
         android:id="@+id/spinner"
-        android:prompt="@string/bank"
-        android:clickable="false" />
+        android:clickable="true"
+        android:layout_below="@+id/ETpass2"
+        android:layout_toEndOf="@+id/textView15" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/spinner"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="계좌번호"
-        android:id="@+id/textView15" />
+        android:id="@+id/textView15"
+        android:layout_below="@+id/spinner"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textView15"
-        android:inputType="number"
         android:ems="10"
-        android:id="@+id/ETaccount" />
+        android:id="@+id/ETaccount"
+        android:layout_alignTop="@+id/textView15"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/textView15"
+        android:inputType="phone" />
 
     <Button
         android:layout_width="wrap_content"

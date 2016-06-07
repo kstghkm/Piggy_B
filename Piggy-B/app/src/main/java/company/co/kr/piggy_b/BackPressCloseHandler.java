@@ -10,7 +10,7 @@ public class BackPressCloseHandler {
     private long backKeyPressedTime = 0;
     private Toast toast;
     private Activity activity;
-
+    LocalDB localDB;
     public BackPressCloseHandler(Activity context) {
         this.activity = context;
     }

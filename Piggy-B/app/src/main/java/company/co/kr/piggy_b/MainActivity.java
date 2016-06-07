@@ -9,29 +9,38 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
+
     EditText etusername, etpassword;
     LocalDB localDB;
-    BackPressCloseHandler backPressCloseHandler;
     CheckBox autoLogin;
+
+
+    BackPressCloseHandler backPressCloseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
         localDB = new LocalDB(this);
         etusername = (EditText)findViewById(R.id.TFusername);
         etpassword = (EditText)findViewById(R.id.TFpass);
         autoLogin = (CheckBox)findViewById(R.id.checkBox);
-        backPressCloseHandler = new BackPressCloseHandler(this);
-        if(autoLogin.isChecked())
-            localDB.setAutoLogin(true);
-        else
-            localDB.setAutoLogin(false);
         if(localDB.getAutoLogin()) {
+            autoLogin.setChecked(true);
             Intent i = new Intent(MainActivity.this, DisplayInfo.class);
             startActivity(i);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        localDB.setAutoLogin(autoLogin.isChecked());
+    }
+
+
     @Override//뒤로가기 눌렀을 때
     public void onBackPressed() {
         backPressCloseHandler.onBackPressed();
@@ -63,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 if(returnedUserInfo == null){
                     // show an error message
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setMessage("Username, Password don't exist");
+                    builder.setMessage("아이디 혹은 비밀번호가 틀렸습니다.");
                     builder.setPositiveButton("OK", null);
                     builder.show();
                 }
@@ -74,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent = new Intent(MainActivity.this, DisplayInfo.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

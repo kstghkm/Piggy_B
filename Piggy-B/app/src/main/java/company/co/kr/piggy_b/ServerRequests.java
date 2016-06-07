@@ -30,6 +30,7 @@ public class ServerRequests {
     public static final int CONNECTION_TIMEOUT = 15000;     //15초
     public static final String SERVER_ADDRESS = "http://piggg.comxa.com";  //서버주소
 
+
     //서버에 요청하는동안 기다림
     public ServerRequests(Context context){
         progressDialog = new ProgressDialog(context);
@@ -39,17 +40,25 @@ public class ServerRequests {
     }
 
 
-    //백그라운드에서 데이터를 서버에 저장중..액티비티는 동결
+    //백그라운드에서 데이터를 서버에 저장중..액티비티는 동결 -> 회원가입에 사용
     public void storeDataInBackground(UserInfo userInfo, GetUserCallback callback){
         progressDialog.show();
         new StoreDataAsyncTask(userInfo, callback).execute();
     }
 
+    //백그라운드에서 유저 데이터를 서버에서 가져오는 중 -> 로그인시 사용
     public void fetchDataInBackground(UserInfo userInfo, GetUserCallback callback){
         progressDialog.show();
         new FetchDataAsyncTask(userInfo, callback).execute();
     }
 
+    //백그라운드에서 유저의 동전 정보를 갱신하는 중 -> 동전 적립시 사용
+    public void updateCoinInBackground(UserInfo userInfo, GetUserCallback callback){
+        progressDialog.show();
+        new UpdateDataAsyncTask(userInfo, callback).execute();
+    }
+
+    //서버에 유저 데이터 저장을 요청
     public class StoreDataAsyncTask extends AsyncTask<Void, Void, Void> {
         UserInfo userInfo;
         GetUserCallback callback;
@@ -61,6 +70,7 @@ public class ServerRequests {
 
         @Override
         protected Void doInBackground(Void... params) {
+            // 보낼 데이터 생성
             ArrayList<NameValuePair> data_to_send = new ArrayList<>();
             data_to_send.add(new BasicNameValuePair("name", userInfo.name));
             data_to_send.add(new BasicNameValuePair("phone", userInfo.phone));
@@ -69,12 +79,67 @@ public class ServerRequests {
             data_to_send.add(new BasicNameValuePair("bank", userInfo.bank));
             data_to_send.add(new BasicNameValuePair("account",userInfo.account));
 
+
+            // http 통신을 위한 초기화 및 설정
             HttpParams httpRequestParams = new BasicHttpParams();
             HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
             HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
 
+
+
+            try {
+                // http 통신 client 생성
+                HttpClient client = new DefaultHttpClient(httpRequestParams);
+
+                // php 파일 경로 설정
+                HttpPost post = new HttpPost(SERVER_ADDRESS+"/Register.php");
+
+                post.setEntity(new UrlEncodedFormEntity(data_to_send));
+                client.execute(post);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+
+            progressDialog.dismiss();
+            callback.done(null);
+            super.onPostExecute(aVoid);
+        }
+    }
+    public class UpdateDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        UserInfo userInfo;
+        GetUserCallback callback;
+
+        public UpdateDataAsyncTask(UserInfo userInfo, GetUserCallback callback){
+            this.userInfo = userInfo;
+            this.callback = callback;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            // 보낼 데이터 생성
+            ArrayList<NameValuePair> data_to_send = new ArrayList<>();
+            data_to_send.add(new BasicNameValuePair("username", userInfo.username));
+            data_to_send.add(new BasicNameValuePair("password", userInfo.password));
+            data_to_send.add(new BasicNameValuePair("coin",String.valueOf(userInfo.getCoin())));
+
+
+            // http 통신을 위한 초기화 및 설정
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+
+            // http 통신 client 생성
             HttpClient client = new DefaultHttpClient(httpRequestParams);
-            HttpPost post = new HttpPost(SERVER_ADDRESS+"/Register.php");
+
+            // php 파일 경로 설정
+            HttpPost post = new HttpPost(SERVER_ADDRESS+"/UpdateCoin.php");
 
             try {
                 post.setEntity(new UrlEncodedFormEntity(data_to_send));
@@ -95,7 +160,6 @@ public class ServerRequests {
             super.onPostExecute(aVoid);
         }
     }
-
     public class FetchDataAsyncTask extends AsyncTask<Void, Void, UserInfo>{
         UserInfo userInfo;
         GetUserCallback callback;
@@ -132,26 +196,24 @@ public class ServerRequests {
                     retunedUserInfo = null;
                 }
                 else{
-                    int coin;
-                    String name, phone, bank, account;
+                    String name, phone, bank, account, coin;
                     name = null;
                     phone = null;
                     bank = null;
                     account = null;
-                    coin = 0;
-
+                    coin = null;
                     if(jsonObject.has("name"))
                         name = jsonObject.getString("name");
                     if(jsonObject.has("phone"))
                         phone = jsonObject.getString("phone");
-//                    if(jsonObject.has("bank"))
-//                        bank = jsonObject.getString("bank");
-//                    if(jsonObject.has("account"))
-//                        account = jsonObject.getString("account");
-//                    if(jsonObject.has("coin"))
-//                        coin = jsonObject.getInt("coin");
+                    if(jsonObject.has("bank"))
+                        bank = jsonObject.getString("bank");
+                    if(jsonObject.has("account"))
+                        account = jsonObject.getString("account");
+                    if(jsonObject.has("coin"))
+                        coin = jsonObject.getString("coin");
 
-                    retunedUserInfo = new UserInfo(name, phone, userInfo.username, userInfo.password, bank, account, coin);
+                    retunedUserInfo = new UserInfo(name, phone, userInfo.username, userInfo.password, bank, account, Integer.valueOf(coin));
 
                 }
             }
