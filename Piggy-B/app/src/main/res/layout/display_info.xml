@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Information"
+        android:text="내정보"
         android:id="@+id/textView9"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
@@ -91,18 +91,19 @@
         android:layout_height="wrap_content"
         android:text="로그아웃"
         android:id="@+id/bLogout"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onLogoutClick" />
+        android:onClick="onLogoutClick"
+        android:layout_below="@+id/bReturn"
+        android:layout_alignStart="@+id/bReturn"
+        android:layout_alignEnd="@+id/bReturn" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/show_coin"
-        android:layout_above="@+id/bLogout"
-        android:layout_alignEnd="@+id/textView9"
-        android:layout_alignStart="@+id/show_account" />
+        android:text = "0"
+        android:layout_alignBottom="@+id/textView14"
+        android:layout_alignEnd="@+id/textView11" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -110,7 +111,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="적립금"
         android:id="@+id/textView11"
-        android:layout_above="@+id/show_coin"
+        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -119,6 +120,17 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text=" 원"
         android:id="@+id/textView14"
-        android:layout_above="@+id/bLogout"
-        android:layout_toEndOf="@+id/bLogout" />
+        android:layout_below="@+id/textView11"
+        android:layout_toEndOf="@+id/show_coin" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="내 동전 돌려받기"
+        android:id="@+id/bReturn"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/textView14"
+        android:layout_alignEnd="@+id/textView14"
+        android:layout_toEndOf="@+id/textView16"
+        android:onClick="onRefundClick" />
 </RelativeLayout>

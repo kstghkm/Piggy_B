@@ -2,6 +2,7 @@ package company.co.kr.piggy_b;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.nfc.NdefMessage;
@@ -10,6 +11,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.tech.NfcF;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -20,8 +22,7 @@ import java.util.Arrays;
 /**
  * Created by user on 2016-05-25.
  */
-public class DisplayInfo extends Activity {
-// NFC 기능 수행 액티비티
+public class DisplayInfo extends Activity {// NFC 기능 수행 액티비티
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFilters;
@@ -107,7 +108,7 @@ public class DisplayInfo extends Activity {
         serverRequests.updateCoinInBackground(userInfo, new GetUserCallback() {
             @Override
             public void done(UserInfo returnedUserInfo) {
-                displayContactDetails();
+                displayUserInfo();
             }
         });
     }
@@ -148,7 +149,7 @@ public class DisplayInfo extends Activity {
         super.onStart();
 
         if(authenticate() == true){
-            displayContactDetails();
+            displayUserInfo();
         }
         else{
             Intent intent = new Intent(DisplayInfo.this, MainActivity.class);
@@ -161,8 +162,8 @@ public class DisplayInfo extends Activity {
         return localDB.getUserLoggedIn();
     }
 
-    //
-    private void displayContactDetails(){
+    //사용자의 정보 출력
+    private void displayUserInfo(){
         UserInfo userInfo = localDB.getLoggedInUser();
         String temp = "";
         switch (userInfo.bank){
@@ -181,15 +182,47 @@ public class DisplayInfo extends Activity {
         tvaccount.setText(temp + "\n" + userInfo.account);
         tvsavedCoin.setText(String.valueOf(userInfo.getCoin()));
     }
+
+
+    //적립한 동전 돌려받기 -> 동전정보 초기화
+    public void onRefundClick(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(DisplayInfo.this);
+        builder.setMessage("동전을 회원님의 계좌로 돌려받으시겠습니까?");
+        builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                UserInfo userInfo = localDB.getLoggedInUser();
+                userInfo.refund_User_Coin();
+                localDB.storeData(userInfo);
+                ServerRequests serverRequests = new ServerRequests(DisplayInfo.this);
+                serverRequests.updateCoinInBackground(userInfo, new GetUserCallback() {
+                    @Override
+                    public void done(UserInfo returnedUserInfo) {
+                        Toast.makeText(DisplayInfo.this,"동전을 통장에 저금했습니다!",Toast.LENGTH_LONG).show();
+                        displayUserInfo();
+                    }
+                });
+            }
+        });
+        builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        builder.show();
+    }
+
+    // 로그아웃버튼 클릭
     public void onLogoutClick(View view){
         localDB.clearData();
         localDB.setUserLoggedIn(false);
 
         Intent intent = new Intent(DisplayInfo.this, MainActivity.class);
         startActivity(intent);
-
+        finish();
     }
 
+    // SharedPreference 로컬 DB에 사용자의 동전 정보 갱신
     private void updateCoin_localDB(UserInfo userInfo, int coin){
         userInfo.update_User_coin(coin);
         localDB.setCoin(userInfo.getCoin());

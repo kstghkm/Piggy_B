@@ -26,6 +26,9 @@ public class UserInfo {
     public void update_User_coin(int coin){
         this.coin = this.coin + coin;
     }
+    public void refund_User_Coin(){
+        this.coin = 0;
+    }
 
     public int getCoin(){
         int coin = this.coin;

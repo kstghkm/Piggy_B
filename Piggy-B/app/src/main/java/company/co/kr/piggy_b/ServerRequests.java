@@ -112,6 +112,8 @@ public class ServerRequests {
             super.onPostExecute(aVoid);
         }
     }
+
+    // mySQL에 저장된 사용자의 동전 정보를 갱신
     public class UpdateDataAsyncTask extends AsyncTask<Void, Void, Void> {
         UserInfo userInfo;
         GetUserCallback callback;
@@ -140,7 +142,7 @@ public class ServerRequests {
 
             // php 파일 경로 설정
             HttpPost post = new HttpPost(SERVER_ADDRESS+"/UpdateCoin.php");
-
+            boolean complete = false;
             try {
                 post.setEntity(new UrlEncodedFormEntity(data_to_send));
                 client.execute(post);
@@ -160,6 +162,8 @@ public class ServerRequests {
             super.onPostExecute(aVoid);
         }
     }
+
+    // 로그인시 mySQL DB서버에 저장된 사용자 정보 가져오기
     public class FetchDataAsyncTask extends AsyncTask<Void, Void, UserInfo>{
         UserInfo userInfo;
         GetUserCallback callback;

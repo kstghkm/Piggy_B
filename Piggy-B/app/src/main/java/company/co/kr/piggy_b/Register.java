@@ -30,6 +30,7 @@ public class Register extends Activity implements AdapterView.OnItemSelectedList
         etconfirm_password = (EditText)findViewById(R.id.ETpass2);
         spinner = (Spinner)findViewById(R.id.spinner);
         etaccount = (EditText)findViewById(R.id.ETaccount);
+
         //은행 선택 spinner
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.bank_list, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -52,9 +53,10 @@ public class Register extends Activity implements AdapterView.OnItemSelectedList
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+        Toast.makeText(this, "은행을 선택하세요", Toast.LENGTH_SHORT).show();
     }
 
-
+    // 회원가입클릭시
     public void onRegisterClick(View view){
 
         String str_name = etname.getText().toString();
