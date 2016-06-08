@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="POS"
+        android:id="@+id/textView9"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/show_coin"
+        android:text = "0"
+        android:layout_alignBottom="@+id/textView14"
+        android:layout_alignEnd="@+id/textView11" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="저금된 동전"
+        android:id="@+id/textView11"
+        android:layout_below="@+id/ETpay"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=" 원"
+        android:id="@+id/textView14"
+        android:layout_below="@+id/textView11"
+        android:layout_toEndOf="@+id/show_coin" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="정산하기"
+        android:id="@+id/bReturn"
+        android:onClick="onRefundClick"
+        android:layout_below="@+id/bCoin"
+        android:layout_alignStart="@+id/bCoin"
+        android:layout_alignEnd="@+id/textView14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="상품 총액"
+        android:id="@+id/textView"
+        android:layout_marginTop="92dp"
+        android:layout_below="@+id/textView9"
+        android:layout_alignStart="@+id/textView11" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ETsum"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_toStartOf="@+id/textView18"
+        android:inputType="number" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=" 원"
+        android:id="@+id/textView18"
+        android:layout_alignTop="@+id/ETsum"
+        android:layout_alignStart="@+id/textView14" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="결제 금액"
+        android:id="@+id/textView17"
+        android:layout_below="@+id/ETsum"
+        android:layout_alignStart="@+id/ETsum" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=" 원"
+        android:id="@+id/textView19"
+        android:layout_alignTop="@+id/ETpay"
+        android:layout_alignEnd="@+id/bCoin" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/ETpay"
+        android:layout_below="@+id/textView17"
+        android:layout_alignStart="@+id/textView17"
+        android:layout_toStartOf="@+id/textView19" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Piggy Coin 전송"
+        android:id="@+id/bCoin"
+        android:layout_below="@+id/show_coin"
+        android:layout_alignStart="@+id/textView11"
+        android:layout_alignEnd="@+id/textView14"
+        android:onClick="onTransferClick" />
+</RelativeLayout>
