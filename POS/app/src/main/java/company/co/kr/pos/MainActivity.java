@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Create
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         tvsavingCoin = (TextView)findViewById(R.id.show_coin);
 
-
-        nfcAdapter.setOnNdefPushCompleteCallback(this, this);
     }
     @Override
     public NdefMessage createNdefMessage(NfcEvent event) {
@@ -97,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements NfcAdapter.Create
         update(piggycoin);
         if(piggycoin>0) {
             nfcAdapter.setNdefPushMessageCallback(this, this);
+            nfcAdapter.setOnNdefPushCompleteCallback(this, this);
         }
         else if(piggycoin == 0 || piggycoin < 0)
             Toast.makeText(this, "거슬러줄 동전이 없습니다.", Toast.LENGTH_LONG).show();
